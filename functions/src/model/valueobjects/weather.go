@@ -3,6 +3,7 @@ package valueobjects
 import (
 	model "github.com/cedv1990/weather-predictor-go/functions/src/model"
 	value "github.com/cedv1990/weather-predictor-go/functions/src/model/valueobjects"
+	utils "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
 )
 
 //Weather Clase encargada del encapsulamiento de los datos correspondientes a un día específico en la predicción.
@@ -14,7 +15,7 @@ type Weather struct {
 	WeatherCondition value.WeatherCondition
 	Day              int
 
-	sun value.Star
+	sun *value.Star
 }
 
 //NewWeather Constructor de la clase Weather
@@ -40,13 +41,15 @@ func (w Weather) setPositionByDayNumber() {
 }
 
 func (w Weather) setWeatherCondition() {
-
+	betasoideCartesianCoordinate := w.calculateCartesianCoordinateFromStar(w.Betasoide)
+	vulcanoCartesianCoordinate := w.calculateCartesianCoordinateFromStar(w.Vulcano)
+	ferengiCartesianCoordinate := w.calculateCartesianCoordinateFromStar(w.Ferengi)
+	sunCartesianCoordinate := w.calculateCartesianCoordinateFromStar(w.sun)
 }
 
 func (w Weather) calculateCartesianCoordinateFromStar(star *value.Star) model.CartesianCoordinate {
 	/**
-	 * Llamado del método de cálculo presente en la clase {@link Utils}.
+	 * Llamado del método de cálculo presente en utils.go.
 	 */
-	//return Utils.getCartesianCoordinateFromPolarCoordinate(star.polarCoordinate);
-	return model.CartesianCoordinate{X: 2, Y: 3}
+	return utils.GetCartesianCoordinateFromPolarCoordinate(star.PolarCoordinate)
 }
