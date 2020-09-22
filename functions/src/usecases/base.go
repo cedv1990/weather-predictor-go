@@ -1,4 +1,4 @@
-package usecases
+package base
 
 //UseCaseBase Interfaz creada para definir los métodos necesarios para implementar los casos de uso.
 type UseCaseBase interface {

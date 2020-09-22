@@ -28,7 +28,7 @@ func GetDaysFromNumberOfYears(years int) (int, error) {
 }
 
 //GetCartesianCoordinateFromPolarCoordinate Método que calcula las coordenadas cartesianas a partir de coordenadas polares.
-func GetCartesianCoordinateFromPolarCoordinate(polar model.PolarCoordinate) model.CartesianCoordinate {
+func GetCartesianCoordinateFromPolarCoordinate(polar *model.PolarCoordinate) model.CartesianCoordinate {
 	radiansAngle := float64(polar.Grades) * math.Pi / 180
 
 	x := float64(polar.Radius) * math.Cos(radiansAngle)

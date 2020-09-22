@@ -1,10 +1,10 @@
 package valueobjects
 
-import model "github.com/cedv1990/weather-predictor-go/functions/src/model"
+import "github.com/cedv1990/weather-predictor-go/functions/src/model"
 
 //Star Entidad encargada del encapsulamiento de las propiedades de cada estrella.
 type Star struct {
-	PolarCoordinate model.PolarCoordinate
+	PolarCoordinate *model.PolarCoordinate
 	Name            string
 	Grades          int
 	Velocity        int
@@ -15,7 +15,7 @@ type Star struct {
 func NewStar(name string, distance, grades, velocity int, clockwise bool) *Star {
 	star := new(Star)
 	star.Name = name
-	star.PolarCoordinate = model.PolarCoordinate{Grades: grades, Radius: distance}
+	star.PolarCoordinate = &model.PolarCoordinate{Grades: grades, Radius: distance}
 	star.Velocity = velocity
 	star.Clockwise = clockwise
 
