@@ -8,8 +8,8 @@ type PolarCoordinate struct {
 
 //CartesianCoordinate Clase que contiene las coordenadas cartesianas de un punto.
 type CartesianCoordinate struct {
-	X int
-	Y int
+	X float64
+	Y float64
 }
 
 //AddGrades Método para sumarle grados a los grados actuales.
