@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -34,5 +35,6 @@ func (a *api) Router() http.Handler {
 
 func main() {
 	server := new()
+	fmt.Println("Corriendo en http://localhost:1234")
 	log.Fatal(http.ListenAndServe(":1234", server.Router()))
 }
