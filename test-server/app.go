@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	functions "github.com/cedv1990/weather-predictor-go/functions/src/http"
 	"github.com/gorilla/mux"
 )
 
@@ -20,8 +21,8 @@ func new() Server {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/generar-prediccion", a.fetchGophers).Methods(http.MethodGet)
-	r.HandleFunc("/clima", a.fetchGopher).Methods(http.MethodGet)
+	r.HandleFunc("/generar-prediccion", functions.GeneratePredictions).Methods(http.MethodGet)
+	r.HandleFunc("/clima", functions.GetSpecificDayWeather).Methods(http.MethodGet)
 
 	a.router = r
 	return a

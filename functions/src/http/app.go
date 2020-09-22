@@ -1,7 +1,9 @@
 package functions
 
+import "net/http"
+
 //GeneratePredictions Genera las predicciones
-func GeneratePredictions() {}
+func GeneratePredictions(w http.ResponseWriter, r *http.Request) {}
 
 //GetSpecificDayWeather Obtiene la prediccion
-func GetSpecificDayWeather() {}
+func GetSpecificDayWeather(w http.ResponseWriter, r *http.Request) {}
