@@ -6,6 +6,12 @@ type PolarCoordinate struct {
 	Grades int
 }
 
+//CartesianCoordinate Clase que contiene las coordenadas cartesianas de un punto.
+type CartesianCoordinate struct {
+	X int
+	Y int
+}
+
 //AddGrades Método para sumarle grados a los grados actuales.
 func (p PolarCoordinate) AddGrades(quantity int) {
 	p.Grades += quantity
@@ -15,10 +21,4 @@ func (p PolarCoordinate) AddGrades(quantity int) {
 //Deprecated: No se usa porque varían los datos por culpa de la constante math.Pi para el cálculo de los radianes, etc.
 func (p PolarCoordinate) NormalizeGrades() {
 	p.Grades %= 360
-}
-
-//CartesianCoordinate Clase que contiene las coordenadas cartesianas de un punto.
-type CartesianCoordinate struct {
-	X int
-	Y int
 }
