@@ -1,7 +1,7 @@
-package valueobjects
+package model
 
 import (
-	model "github.com/cedv1990/weather-predictor-go/functions/src/model"
+	vo "github.com/cedv1990/weather-predictor-go/functions/src/model/valueobjects"
 	utils "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
 )
 
@@ -11,7 +11,7 @@ type Weather struct {
 	Vulcano          *Star
 	Ferengi          *Star
 	Perimeter        float64
-	WeatherCondition WeatherCondition
+	WeatherCondition vo.WeatherCondition
 	Day              int
 
 	sun *Star
@@ -60,10 +60,18 @@ func (w Weather) setWeatherCondition() {
 	/**
 	 * Se obtienen las coordenadas cartesianas de cada planeta a partir de sus coordenadas polares.
 	 */
-	betasoideCartesianCoordinate := w.calculateCartesianCoordinateFromStar(w.Betasoide)
-	vulcanoCartesianCoordinate := w.calculateCartesianCoordinateFromStar(w.Vulcano)
-	ferengiCartesianCoordinate := w.calculateCartesianCoordinateFromStar(w.Ferengi)
-	sunCartesianCoordinate := w.calculateCartesianCoordinateFromStar(w.sun)
+	betasoideCartesianCoordinateX, betasoideCartesianCoordinateY := w.calculateCartesianCoordinateFromStar(w.Betasoide)
+	vulcanoCartesianCoordinateX, vulcanoCartesianCoordinateY := w.calculateCartesianCoordinateFromStar(w.Vulcano)
+	ferengiCartesianCoordinateX, ferengiCartesianCoordinateY := w.calculateCartesianCoordinateFromStar(w.Ferengi)
+	sunCartesianCoordinateX, sunCartesianCoordinateY := w.calculateCartesianCoordinateFromStar(w.sun)
+
+	/**
+	 *Se crean las instancias
+	 */
+	betasoideCartesianCoordinate := CartesianCoordinate{X: betasoideCartesianCoordinateX, Y: betasoideCartesianCoordinateY}
+	vulcanoCartesianCoordinate := CartesianCoordinate{X: vulcanoCartesianCoordinateX, Y: vulcanoCartesianCoordinateY}
+	ferengiCartesianCoordinate := CartesianCoordinate{X: ferengiCartesianCoordinateX, Y: ferengiCartesianCoordinateY}
+	sunCartesianCoordinate := CartesianCoordinate{X: sunCartesianCoordinateX, Y: sunCartesianCoordinateY}
 
 	/**
 	 * Se realiza el llamado del método que devuelve la función que calcula la pendiente de la recta
@@ -92,9 +100,9 @@ func (w Weather) setWeatherCondition() {
 		 * cual significa que habrán condiciones óptimas de presión y temperatura.
 		 */
 		if slopeBetasoideFerengi == slopeBetasoideSun {
-			w.WeatherCondition = Dry
+			w.WeatherCondition = vo.Dry
 		} else {
-			w.WeatherCondition = Optimal
+			w.WeatherCondition = vo.Optimal
 		}
 	} else {
 		/**
@@ -124,13 +132,13 @@ func (w Weather) setWeatherCondition() {
 		 * Si lo está, quiere decir que la condición del clima será de lluvia.
 		 */
 		if utils.EvaluateIfPointIsInsideTheTriangle(&betasoideCartesianCoordinate, &ferengiCartesianCoordinate, &vulcanoCartesianCoordinate, &sunCartesianCoordinate) {
-			w.WeatherCondition = Rain
+			w.WeatherCondition = vo.Rain
 		}
 	}
 }
 
 //Método para calcular la coordenada cartesiana a partir de la coordenada polar.
-func (w Weather) calculateCartesianCoordinateFromStar(star *Star) model.CartesianCoordinate {
+func (w Weather) calculateCartesianCoordinateFromStar(star *Star) (x, y float64) {
 	/**
 	 * Llamado del método de cálculo presente en utils.go.
 	 */

@@ -4,8 +4,6 @@ import (
 	"errors"
 	"math"
 	"time"
-
-	"github.com/cedv1990/weather-predictor-go/functions/src/model"
 )
 
 const (
@@ -28,21 +26,21 @@ func GetDaysFromNumberOfYears(years int) (int, error) {
 }
 
 //GetCartesianCoordinateFromPolarCoordinate Método que calcula las coordenadas cartesianas a partir de coordenadas polares.
-func GetCartesianCoordinateFromPolarCoordinate(polar *model.PolarCoordinate) model.CartesianCoordinate {
-	radiansAngle := float64(polar.Grades) * math.Pi / 180
+func GetCartesianCoordinateFromPolarCoordinate(polar Coordinate) (x, y float64) {
+	radiansAngle := float64(polar.GetGrades()) * math.Pi / 180
 
-	x := float64(polar.Radius) * math.Cos(radiansAngle)
+	x = float64(polar.GetRadius()) * math.Cos(radiansAngle)
 
-	y := float64(polar.Radius) * math.Sin(radiansAngle)
+	y = float64(polar.GetRadius()) * math.Sin(radiansAngle)
 
-	return model.CartesianCoordinate{X: x, Y: y}
+	return
 }
 
 //GenerateFunctionToCalculateSlope Método que devuelve la función que calcula la pendiente formada entre dos puntos, a partir de sus coordenadas cartesianas.
-func GenerateFunctionToCalculateSlope(from *model.CartesianCoordinate) func(to *model.CartesianCoordinate) float64 {
-	return func(to *model.CartesianCoordinate) float64 {
-		x1, y1 := from.X, from.Y
-		x2, y2 := to.X, to.Y
+func GenerateFunctionToCalculateSlope(from Coordinate) func(to Coordinate) float64 {
+	return func(to Coordinate) float64 {
+		x1, y1 := from.GetX(), from.GetY()
+		x2, y2 := to.GetX(), to.GetY()
 
 		m := GetSlope(x1, y1, x2, y2)
 
@@ -62,15 +60,15 @@ func Round(decimal float64, to int) float64 {
 }
 
 //GetDistanceBetweenPoints Método que calcula la distancia que hay entre 2 puntos cartesianos.
-func GetDistanceBetweenPoints(from, to *model.CartesianCoordinate) float64 {
-	co := math.Pow(to.X-from.X, 2)
-	ca := math.Pow(to.Y-from.Y, 2)
+func GetDistanceBetweenPoints(from, to Coordinate) float64 {
+	co := math.Pow(to.GetX()-from.GetX(), 2)
+	ca := math.Pow(to.GetY()-from.GetY(), 2)
 
 	return math.Sqrt(ca + co)
 }
 
 //EvaluateIfPointIsInsideTheTriangle Método que evalúa si un punto P se encuentra dentro del perímetro de un triángulo formado por los puntos A + B + C.
-func EvaluateIfPointIsInsideTheTriangle(a, b, c, p *model.CartesianCoordinate) bool {
+func EvaluateIfPointIsInsideTheTriangle(a, b, c, p Coordinate) bool {
 	/**
 	 * Fórmula tomada de {@link "https://huse360.home.blog/2019/12/14/como-saber-si-un-punto-esta-dentro-de-un-triangulo/"}
 	 */
@@ -78,24 +76,24 @@ func EvaluateIfPointIsInsideTheTriangle(a, b, c, p *model.CartesianCoordinate) b
 	/**
 	 * Segmento del triángulo resultado de B - A
 	 */
-	d := model.CartesianCoordinate{X: b.X - a.X, Y: b.Y - a.Y}
+	dx, dy := b.GetX()-a.GetX(), b.GetY()-a.GetY()
 
 	/**
 	 * Segmento del triángulo resultado de C - A
 	 */
-	e := model.CartesianCoordinate{X: c.X - a.X, Y: c.Y - a.Y}
+	ex, ey := c.GetX()-a.GetX(), c.GetY()-a.GetY()
 
 	/**
 	 * Variable de ponderación a ~ b (Vector de "a" hacia "b". Segmento que sumado a w2 da la ubicación de P)
 	 * w1 = (Ex*(Ay + Py) + Ey*(Px - Ax)) / (Dx*Ey - Dy*Ex)
 	 */
-	w1 := (e.X*(a.Y-p.Y) + e.Y*(p.X-a.X)) / (d.X*e.Y - d.Y*e.X)
+	w1 := (ex*(a.GetY()-p.GetY()) + ey*(p.GetX()-a.GetX())) / (dx*ey - dy*ex)
 
 	/**
 	 * Variable de ponderación a ~ c (Vector de "a" hacia "c". Segmento que sumado a w1 da la ubicación de P)
 	 * w2 = (1 / Ey) * (Py - Ay - w1*Dy)
 	 */
-	w2 := (p.Y - a.Y - w1*d.Y) / e.Y
+	w2 := (p.GetY() - a.GetY() - w1*dy) / ey
 
 	/**
 	 * Si el vector w1 es positivo o igual a 0 y

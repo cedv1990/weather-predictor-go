@@ -6,8 +6,8 @@ import (
 
 //SolarSystem Entidad encargada del encapsulamiento de las propiedades de cada estrella.
 type SolarSystem struct {
-	Sun             *vo.Star
-	Days            []*vo.Weather
+	Sun             *Star
+	Days            []*Weather
 	DaysWithMaxRain []int
 	MaxPerimeter    float64
 	DryDays         int
@@ -29,7 +29,7 @@ func NewSolarSystem(days int) *SolarSystem {
 //Agrega las predicciones a la lista de días que las contiene.
 func (s SolarSystem) createPrediction(days int) {
 	for i := 0; i < days; i++ {
-		s.Days = append(s.Days, vo.NewWeather(*s.Sun, i))
+		s.Days = append(s.Days, NewWeather(*s.Sun, i))
 	}
 }
 
@@ -67,7 +67,7 @@ func (s SolarSystem) calculateRelevanDataFromDays() {
 }
 
 //Método para filtrar los días por su condición climática.
-func (s SolarSystem) filterByWeatherCondition(condition vo.WeatherCondition) (ret []*vo.Weather) {
+func (s SolarSystem) filterByWeatherCondition(condition vo.WeatherCondition) (ret []*Weather) {
 	for _, o := range s.Days {
 		if o.WeatherCondition == condition {
 			ret = append(ret, o)
@@ -77,7 +77,7 @@ func (s SolarSystem) filterByWeatherCondition(condition vo.WeatherCondition) (re
 }
 
 //Método para encontrar el perímetro máximo de una lista de Weather
-func findMaxPerimeter(a []*vo.Weather) (max float64) {
+func findMaxPerimeter(a []*Weather) (max float64) {
 	max = a[0].Perimeter
 	for _, o := range a {
 		if o.Perimeter > max {
@@ -88,7 +88,7 @@ func findMaxPerimeter(a []*vo.Weather) (max float64) {
 }
 
 //Método para obtener la lista de días que tienen el perímetro máximo
-func getDaysWithMaxPerimeter(a []*vo.Weather, p float64) (ret []int) {
+func getDaysWithMaxPerimeter(a []*Weather, p float64) (ret []int) {
 	for _, o := range a {
 		if o.Perimeter == p {
 			ret = append(ret, o.Day)
