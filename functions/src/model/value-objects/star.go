@@ -1,8 +1,10 @@
 package valueobjects
 
+import model "github.com/cedv1990/weather-predictor-go/functions/src/model"
+
 //Star Entidad encargada del encapsulamiento de las propiedades de cada estrella.
 type Star struct {
-	PolarCoordinate PolarCoordinate
+	PolarCoordinate model.PolarCoordinate
 	Name            string
 	Grades          int
 	Velocity        int
@@ -11,9 +13,9 @@ type Star struct {
 
 //NewStar Constructor de la clase Star
 func NewStar(name string, distance, grades, velocity int, clockwise bool) *Star {
-	star := new(Satr)
+	star := new(Star)
 	star.Name = name
-	star.PolarCoordinate = PolarCoordinate{Grades: grades, Radius: distance}
+	star.PolarCoordinate = model.PolarCoordinate{Grades: grades, Radius: distance}
 	star.Velocity = velocity
 	star.Clockwise = clockwise
 
@@ -21,7 +23,7 @@ func NewStar(name string, distance, grades, velocity int, clockwise bool) *Star 
 }
 
 //SetPositionByDayNumber Método encargado de asignar la nueva coordenada polar de la estrella a partir de un número de día.
-func (star NewStar) SetPositionByDayNumber(dayNumber int) {
+func (star Star) SetPositionByDayNumber(dayNumber int) {
 	if star.Clockwise {
 		star.PolarCoordinate.AddGrades(-star.Velocity * dayNumber)
 	} else {
