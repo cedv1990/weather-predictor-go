@@ -16,3 +16,9 @@ func (p PolarCoordinate) AddGrades(quantity int) {
 func (p PolarCoordinate) NormalizeGrades() {
 	p.Grades %= 360
 }
+
+//CartesianCoordinate Clase que contiene las coordenadas cartesianas de un punto.
+type CartesianCoordinate struct {
+	X int
+	Y int
+}
