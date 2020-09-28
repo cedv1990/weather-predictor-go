@@ -1,7 +1,9 @@
 package shareddomain
 
 type (
-	Error interface {}
+	Error interface {
+		Validate() bool
+	}
 
 	ValidationError struct {
 		Error
@@ -34,4 +36,8 @@ func NewValidationException(errors []Error) *ValidationException {
 
 func (ex ValidationException) GetErrors() *[]Error {
 	return &ex.errors
+}
+
+func (er AlreadyExistsError) Validate() bool {
+	return er.Is
 }
