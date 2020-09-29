@@ -20,35 +20,39 @@ func NewInMemorySolarSystemRepository() *InMemorySolarSystemRepository {
 	return iss
 }
 
-func (iss InMemorySolarSystemRepository) Create(solarSystem *model.SolarSystem) (*model.SolarSystem, *errors.ValidationException) {
+func (iss *InMemorySolarSystemRepository) Create(solarSystem *model.SolarSystem) (*model.SolarSystem, *errors.ValidationException) {
 	if iss.Exists() {
-		ex := errors.NewValidationException([]errors.Error{errors.AlreadyExistsError{ Is: true }})
+		ex := errors.NewValidationException(&[]errors.Error{errors.NewAlreadyExistsError(true)})
 		return nil, ex
 	}
 	repo = solarSystem
 	return solarSystem, nil
 }
 
-func (iss InMemorySolarSystemRepository) Exists() bool {
+func (iss *InMemorySolarSystemRepository) Exists() bool {
 	return repo != nil
 }
 
-func (iss InMemorySolarSystemRepository) GetDay(day int) (*model.Weather, *errors.ValidationException) {
+func (iss *InMemorySolarSystemRepository) GetDay(day int) (*model.Weather, *errors.ValidationException) {
 
 	sendError := func() (*model.Weather, *errors.ValidationException) {
-		ex := errors.NewValidationException([]errors.Error{errors.NotExistsError{ No: true }})
+		ex := errors.NewValidationException(&[]errors.Error{errors.NewNotExistsError(true)})
 		return nil, ex
 	}
 
-	if iss.Exists() {
+	if !iss.Exists() {
 		return sendError()
 	}
 
-	weather := repo.Days[day]
+	if day < len(repo.Days) && day >= 0 {
+		weather := repo.Days[day]
 
-	if weather == nil {
-		return sendError()
+		if weather == nil {
+			return sendError()
+		}
+
+		return weather, nil
 	}
 
-	return weather, nil
+	return sendError()
 }

@@ -15,6 +15,6 @@ func NewCommand(day int) *Command {
 }
 
 //Get Obtiene el número de día que se necesita para consultar el clima en ese momento.
-func (c Command) Get() int {
+func (c *Command) Get() int {
 	return c.day
 }

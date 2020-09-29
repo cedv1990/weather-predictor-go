@@ -6,35 +6,25 @@ import (
 	"net/http"
 
 	functions "github.com/cedv1990/weather-predictor-go/functions/src/http"
-	"github.com/gorilla/mux"
 )
 
-type api struct {
-	router http.Handler
+func handleFunc(method, url string, function func(http.ResponseWriter, *http.Request)) {
+	http.HandleFunc(url, func(w http.ResponseWriter, r *http.Request){
+		if r.Method == method {
+			function(w, r)
+		} else {
+			w.WriteHeader(http.StatusUnauthorized)
+		}
+	})
 }
 
-type Server interface {
-	Router() http.Handler
-}
-
-func new() Server {
-	a := &api{}
-
-	r := mux.NewRouter()
-
-	r.HandleFunc("/generar-prediccion", functions.GeneratePredictions).Methods(http.MethodGet)
-	r.HandleFunc("/clima", functions.GetSpecificDayWeather).Methods(http.MethodGet)
-
-	a.router = r
-	return a
-}
-
-func (a *api) Router() http.Handler {
-	return a.router
+func instance() {
+	handleFunc(http.MethodGet,"/generar-prediccion", functions.GeneratePredictions)
+	handleFunc(http.MethodGet,`/clima`, functions.GetSpecificDayWeather)
 }
 
 func main() {
-	server := new()
+	instance()
 	fmt.Println("Corriendo en http://localhost:1234")
-	log.Fatal(http.ListenAndServe(":1234", server.Router()))
+	log.Fatal(http.ListenAndServe(":1234", nil))
 }

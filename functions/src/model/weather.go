@@ -18,15 +18,18 @@ type Weather struct {
 }
 
 //NewWeather Constructor de la clase Weather
-func NewWeather(sun Star, day int) *Weather {
+func NewWeather(sun *Star, day int) *Weather {
 	w := new(Weather)
+	w.sun = sun
+	w.Day = day
+	w.WeatherCondition = vo.Normal
 	w.initializeStars()
 	w.setPositionByDayNumber()
 	return w
 }
 
 //Método para inicializar los planetas con su respectiva configuración.
-func (w Weather) initializeStars() {
+func (w *Weather) initializeStars() {
 	/**
 	 * Se instancian los planetas con:
 	 * Nombre
@@ -41,7 +44,7 @@ func (w Weather) initializeStars() {
 }
 
 //Método para asignar las posiciones correspondientes de los planetas dependiendo del número de día.
-func (w Weather) setPositionByDayNumber() {
+func (w *Weather) setPositionByDayNumber() {
 	/**
 	 * Llamado al método que realiza el cálculo de la posición del planeta con respecto al número de día.
 	 */
@@ -56,14 +59,14 @@ func (w Weather) setPositionByDayNumber() {
 }
 
 //Método encargado de asignar la condición climática del día.
-func (w Weather) setWeatherCondition() {
+func (w *Weather) setWeatherCondition() {
 	/**
 	 * Se obtienen las coordenadas cartesianas de cada planeta a partir de sus coordenadas polares.
 	 */
-	betasoideCartesianCoordinateX, betasoideCartesianCoordinateY := w.calculateCartesianCoordinateFromStar(w.Betasoide)
-	vulcanoCartesianCoordinateX, vulcanoCartesianCoordinateY := w.calculateCartesianCoordinateFromStar(w.Vulcano)
-	ferengiCartesianCoordinateX, ferengiCartesianCoordinateY := w.calculateCartesianCoordinateFromStar(w.Ferengi)
-	sunCartesianCoordinateX, sunCartesianCoordinateY := w.calculateCartesianCoordinateFromStar(w.sun)
+	betasoideCartesianCoordinateX, betasoideCartesianCoordinateY := w.Betasoide.calculateCartesianCoordinateFromStar()
+	vulcanoCartesianCoordinateX, vulcanoCartesianCoordinateY := w.Vulcano.calculateCartesianCoordinateFromStar()
+	ferengiCartesianCoordinateX, ferengiCartesianCoordinateY := w.Ferengi.calculateCartesianCoordinateFromStar()
+	sunCartesianCoordinateX, sunCartesianCoordinateY := w.sun.calculateCartesianCoordinateFromStar()
 
 	/**
 	 *Se crean las instancias
@@ -138,7 +141,7 @@ func (w Weather) setWeatherCondition() {
 }
 
 //Método para calcular la coordenada cartesiana a partir de la coordenada polar.
-func (w Weather) calculateCartesianCoordinateFromStar(star *Star) (x, y float64) {
+func (star *Star) calculateCartesianCoordinateFromStar() (x, y float64) {
 	/**
 	 * Llamado del método de cálculo presente en utils.go.
 	 */

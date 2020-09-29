@@ -9,18 +9,33 @@ import (
 	"net/http"
 )
 
-type CreateController struct {
+type SolarSystemController struct {
 	BaseController
 	base.ResponderBase
 
 	data *model.SolarSystem
 }
 
-func NewCreateController() *CreateController {
-	inst := new(CreateController)
+func NewCreateController() *SolarSystemController {
+	inst := new(SolarSystemController)
 	inst.UseCaseName = Create
 
 	return inst
+}
+
+func (inst *SolarSystemController) generate(days int) {
+	useCase := inst.GetUseCase()
+	command := cases.NewCommand(days)
+
+	useCase.Execute(command, inst)
+}
+
+func (inst *SolarSystemController) SuccessfullyCreated(system *model.SolarSystem) {
+	inst.data = system
+}
+
+func (inst *SolarSystemController) NotCreated(errors *[]utils.Error) {
+	inst.presentedErrors = errors
 }
 
 func GeneratePredictions(response http.ResponseWriter) {
@@ -39,14 +54,14 @@ func GeneratePredictions(response http.ResponseWriter) {
 	inst.generate(days)
 
 	if inst.presentedErrors != nil {
-		inst.SendError(response)
+		inst.SendError(response, "The solar system was already created. Congrats!")
 		return
 	}
 
 	response.WriteHeader(http.StatusCreated)
 	er := json.NewEncoder(response).Encode(struct{
-		Created bool
-		Data model.SolarSystem
+		Created bool 			`json:"created"`
+		Data model.SolarSystem	`json:"data"`
 	}{
 		Created: true,
 		Data: *inst.data,
@@ -55,19 +70,4 @@ func GeneratePredictions(response http.ResponseWriter) {
 	if er != nil {
 		panic(er)
 	}
-}
-
-func (inst CreateController) generate(days int) {
-	useCase := inst.GetUseCase()
-	command := cases.NewCommand(days)
-
-	useCase.Execute(command, inst)
-}
-
-func (inst CreateController) SuccessfullyCreated(system *model.SolarSystem) {
-	inst.data = system
-}
-
-func (inst CreateController) NotCreated(errors *[]utils.Error) {
-	inst.presentedErrors = errors
 }

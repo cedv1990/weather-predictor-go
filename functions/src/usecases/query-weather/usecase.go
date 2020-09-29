@@ -19,7 +19,7 @@ func NewUseCase(repo domain.SolarSystemRepository) *UseCase {
 }
 
 //Execute Método que invoca el comando que obtiene el estado del clima de un día específico.
-func (uc UseCase) Execute(command base.CommandBase, responder base.ResponderBase) {
+func (uc *UseCase) Execute(command base.CommandBase, responder base.ResponderBase) {
 
 	weather, valEx := repository.GetDay(command.Get())
 

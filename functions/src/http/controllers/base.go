@@ -30,8 +30,8 @@ const (
 	QueryWeather   	UseCaseName = "queryWeather"
 )
 
-func (ac BaseController) FillUseCases() {
-	if useCases == nil {
+func (ac *BaseController) FillUseCases() {
+	if useCases == nil || len(useCases) == 0 {
 		var repo domain.SolarSystemRepository
 		databaseType := os.Getenv("DATABASE_TYPE")
 		if databaseType == "" || databaseType == "inMemory" {
@@ -45,11 +45,12 @@ func (ac BaseController) FillUseCases() {
 	}
 }
 
-func (ac BaseController) GetUseCase() base.UseCaseBase {
+func (ac *BaseController) GetUseCase() base.UseCaseBase {
+	ac.FillUseCases()
 	return useCases[ac.UseCaseName]
 }
 
-func (ac BaseController) SendError(response http.ResponseWriter) {
+func (ac *BaseController) SendError(response http.ResponseWriter, message string) {
 	exists := false
 
 	for _, i := range *ac.presentedErrors {
@@ -64,7 +65,7 @@ func (ac BaseController) SendError(response http.ResponseWriter) {
 	}{}
 
 	if exists {
-		r.Message = "The solar system was already created. Congrats!"
+		r.Message = message
 		response.WriteHeader(http.StatusOK)
 	} else {
 		r.Message = "Uncontrolled error"

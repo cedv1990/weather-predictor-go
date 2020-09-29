@@ -21,7 +21,7 @@ func NewStar(name string, distance, grades, velocity int, clockwise bool) *Star 
 }
 
 //SetPositionByDayNumber Método encargado de asignar la nueva coordenada polar de la estrella a partir de un número de día.
-func (star Star) SetPositionByDayNumber(dayNumber int) {
+func (star *Star) SetPositionByDayNumber(dayNumber int) {
 	if star.Clockwise {
 		star.PolarCoordinate.AddGrades(-star.Velocity * dayNumber)
 	} else {

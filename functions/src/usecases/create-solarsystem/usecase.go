@@ -19,7 +19,7 @@ func NewUseCase(repo domain.SolarSystemRepository) *UseCase {
 }
 
 //Execute Método que invoca el comando que obtiene los días que se generarán. Luego, realiza el llamado del método de creación del repositorio, el cual persiste los datos ya sea en memoria o en Firebase.
-func (uc UseCase) Execute(command base.CommandBase, responder base.ResponderBase) {
+func (uc *UseCase) Execute(command base.CommandBase, responder base.ResponderBase) {
 
 	solarSystem, valEx := domain.Create(command.Get())
 

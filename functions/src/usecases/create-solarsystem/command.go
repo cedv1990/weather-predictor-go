@@ -15,6 +15,6 @@ func NewCommand(solarSystemDays int) *Command {
 }
 
 //Get Obtiene el número de días que se necesita para generar la predicción.
-func (c Command) Get() int {
+func (c *Command) Get() int {
 	return c.solarSystemDays
 }

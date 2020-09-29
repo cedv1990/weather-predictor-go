@@ -6,35 +6,35 @@ import (
 
 //SolarSystem Entidad encargada del encapsulamiento de las propiedades de cada estrella.
 type SolarSystem struct {
-	Sun             *Star
-	Days            []*Weather
-	DaysWithMaxRain []int
-	MaxPerimeter    float64
-	DryDays         int
-	RainyDays       int
-	OptimalDays     int
-	NormalDays      int
+	Sun             *Star		`json:"-"`
+	Days            []*Weather	`json:"-"`
+	DaysWithMaxRain []int		`json:"daysWithMaxRain"`
+	MaxPerimeter    float64		`json:"maxPerimeter"`
+	DryDays         int			`json:"dryDays"`
+	RainyDays       int			`json:"rainyDays"`
+	OptimalDays     int			`json:"optimalDays"`
+	NormalDays      int			`json:"normalDays"`
 }
 
 //NewSolarSystem Constructor de la clase SolarSystem
 func NewSolarSystem(days int) *SolarSystem {
 	solar := new(SolarSystem)
-
+	solar.Days = []*Weather{}
+	solar.Sun = NewStar("Sun", 0, 0, 0, false)
 	solar.createPrediction(days)
 	solar.calculateRelevanDataFromDays()
-
 	return solar
 }
 
 //Agrega las predicciones a la lista de días que las contiene.
-func (s SolarSystem) createPrediction(days int) {
+func (s *SolarSystem) createPrediction(days int) {
 	for i := 0; i < days; i++ {
-		s.Days = append(s.Days, NewWeather(*s.Sun, i))
+		s.Days = append(s.Days, NewWeather(s.Sun, i))
 	}
 }
 
 //Método para extraer los datos relevantes de los días calculados.
-func (s SolarSystem) calculateRelevanDataFromDays() {
+func (s *SolarSystem) calculateRelevanDataFromDays() {
 	/**
 	 * Se filtran los días por su condición climática.
 	 */
@@ -67,7 +67,7 @@ func (s SolarSystem) calculateRelevanDataFromDays() {
 }
 
 //Método para filtrar los días por su condición climática.
-func (s SolarSystem) filterByWeatherCondition(condition vo.WeatherCondition) (ret []*Weather) {
+func (s *SolarSystem) filterByWeatherCondition(condition vo.WeatherCondition) (ret []*Weather) {
 	for _, o := range s.Days {
 		if o.WeatherCondition == condition {
 			ret = append(ret, o)
@@ -91,6 +91,7 @@ func findMaxPerimeter(a []*Weather) (max float64) {
 func getDaysWithMaxPerimeter(a []*Weather, p float64) (ret []int) {
 	for _, o := range a {
 		if o.Perimeter == p {
+			o.WeatherCondition = vo.RainPeak
 			ret = append(ret, o.Day)
 		}
 	}
