@@ -50,7 +50,7 @@ Para poder utilizar el sistema como un **servicio a las otras civilizaciones**, 
 
 ## ¿Cómo pruebo la solución de este repositorio? 🤔︎
 
-El proyecto consta de 2 carpetas de aplicación ([functions](https://github.com/cedv1990/weather-predictor-go/tree/master/functions) y [test-server](https://github.com/cedv1990/weather-predictor-go/tree/master/test-server)) y una carpeta para los recursos de esta documentación ([assets](https://github.com/cedv1990/weather-predictor-go/tree/master/assets)).
+El proyecto consta de 2 carpetas de aplicación ([functions](https://github.com/cedv1990/weather-predictor-go/tree/master/functions) y [test-server](https://github.com/cedv1990/weather-predictor-go/tree/master/test-server)).
 
 Una vez se clona o descarga el proyecto, se deben seguir los comandos a continuación.
 
