@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	functions "github.com/cedv1990/weather-predictor-go/functions/src/http"
 )
@@ -24,7 +25,12 @@ func instance() {
 }
 
 func main() {
-	instance()
+	databaseType := os.Getenv("DATABASE_TYPE")
+	if databaseType == "" {
+		databaseType = "inMemory"
+	}
 	fmt.Println("Corriendo en http://localhost:1234")
+	fmt.Println(databaseType)
+	instance()
 	log.Fatal(http.ListenAndServe(":1234", nil))
 }

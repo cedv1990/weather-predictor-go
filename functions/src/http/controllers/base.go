@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	domain "github.com/cedv1990/weather-predictor-go/functions/src/domain/solarsystem"
 	repos "github.com/cedv1990/weather-predictor-go/functions/src/infraestructure/solarsystem"
 	errors "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
@@ -10,6 +11,7 @@ import (
 	query "github.com/cedv1990/weather-predictor-go/functions/src/usecases/query-weather"
 	"net/http"
 	"os"
+	"strings"
 )
 
 var (
@@ -30,14 +32,17 @@ const (
 	QueryWeather   	UseCaseName = "queryWeather"
 )
 
-func (ac *BaseController) FillUseCases() {
+func (ac *BaseController) FillUseCases()  {
 	if useCases == nil || len(useCases) == 0 {
 		var repo domain.SolarSystemRepository
 		databaseType := os.Getenv("DATABASE_TYPE")
-		if databaseType == "" || databaseType == "inMemory" {
+		if databaseType == "" || strings.EqualFold(databaseType, "inMemory") {
 			repo = repos.NewInMemorySolarSystemRepository()
-		} else {
+		} else if strings.EqualFold(databaseType, "MySQL") {
+			fmt.Println("Entra!!")
 			//repo = repos.NewMySqlSolarSystemRepository()
+		} else {
+			//SIN REPO
 		}
 
 		useCases[Create] = create.NewUseCase(repo)
