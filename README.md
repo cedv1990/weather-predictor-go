@@ -9,7 +9,7 @@ Dominan la predicción del clima mediante un complejo sistema informático.
 A continuación el diagrama del sistema solar.
 
 <p align="center">
-    <img alt="Sistema solar" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-go/master/assets/solar-system.jpg">
+    <img alt="Sistema solar" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-ts/master/assets/solar-system.jpg">
 </p>
 
 ### Premisas
@@ -25,19 +25,19 @@ A continuación el diagrama del sistema solar.
 Cuando los **tres planetas están alineados entre sí y a su vez alineados con respecto al sol**, el sistema solar experimenta un período de ***sequía***.
 
 <p align="center">
-    <img alt="Sequía" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-go/master/assets/dry.jpg">
+    <img alt="Sequía" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-ts/master/assets/dry.jpg">
 </p>
 
 Cuando los **tres planetas no están alineados**, forman entre sí un **triángulo**. Es sabido que en el momento en el que el **sol se encuentra dentro del triángulo**, el sistema solar experimenta un período de ***lluvia***, teniendo éste, un ***pico de intensidad*** cuando el perímetro del ***triángulo está en su máximo***.
 
 <p align="center">
-    <img alt="Lluvia" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-go/master/assets/rain.jpg">
+    <img alt="Lluvia" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-ts/master/assets/rain.jpg">
 </p>
 
 Las condiciones ***óptimas de presión y temperatura*** se dan cuando los **tres planetas están alineados entre sí pero no están alineados con el sol**.
 
 <p align="center">
-    <img alt="Óptimo" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-go/master/assets/optimal.jpg">
+    <img alt="Óptimo" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-ts/master/assets/optimal.jpg">
 </p>
 
 Se debe desarrollar un programa que pueda predecir la siguiente información en los ***próximos 10 años***:
