@@ -2,25 +2,30 @@ package solarsystem
 
 import (
 	"github.com/cedv1990/weather-predictor-go/functions/src/model"
-	"github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
+	errors "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
 )
 
-type SolarSystemValidator struct {
-	shareddomain.DomainModelValidator
+//Validator Clase creada para la validación de errores en el proceso de creación de la instancia de model.SolarSystem.
+//Implementa errors.DomainModelValidator.
+type Validator struct {
+	errors.DomainModelValidator
 
-	errors *[]shareddomain.Error
+	errors *[]errors.Error
 }
 
-func NewSolarSystemValidator() *SolarSystemValidator {
-	ss := new(SolarSystemValidator)
-	ss.errors = &[]shareddomain.Error{}
+func NewValidator() *Validator {
+	ss := new(Validator)
+	ss.errors = &[]errors.Error{}
 	return ss
 }
 
-func (ss *SolarSystemValidator) Validate(model *model.SolarSystem) bool {
+//Validate Método para validar el modelo o la cantidad de errores que ocurrieron en el proceso de creación de las
+//predicciones.
+func (ss *Validator) Validate(model *model.SolarSystem) bool {
 	return ss.errors == nil || len(*ss.errors) == 0
 }
 
-func (ss *SolarSystemValidator) GetErrors() *[]shareddomain.Error {
+//GetErrors Método que retorna la lista de errores.
+func (ss *Validator) GetErrors() *[]errors.Error {
 	return ss.errors
 }

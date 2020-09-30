@@ -8,6 +8,7 @@ type Command struct {
 	solarSystemDays int
 }
 
+//NewCommand Constructor de Command
 func NewCommand(solarSystemDays int) *Command {
 	c := new(Command)
 	c.solarSystemDays = solarSystemDays

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	domain "github.com/cedv1990/weather-predictor-go/functions/src/domain/solarsystem"
 	repos "github.com/cedv1990/weather-predictor-go/functions/src/infraestructure/solarsystem"
 	errors "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
@@ -14,16 +13,16 @@ import (
 	"strings"
 )
 
-var (
-	useCases = make(map[UseCaseName]base.UseCaseBase)
-)
+var useCases = make(map[UseCaseName]base.UseCaseBase) //Almacena los diferentes casos de uso y su respectiva instancia de implementación.
 
 type (
+	//BaseController Clase que se usará para heredarse en los diferentes controladores.
 	BaseController struct {
-		UseCaseName UseCaseName
-		presentedErrors *[]errors.Error
+		UseCaseName UseCaseName //Nombre del caso de uso del controlador.
+		presentedErrors *[]errors.Error //Lista de errores ocurridos en las ejecuciones.
 	}
 
+	//UseCaseName Enumerador para listar los nombres de los casos de uso.
 	UseCaseName string
 )
 
@@ -32,29 +31,13 @@ const (
 	QueryWeather   	UseCaseName = "queryWeather"
 )
 
-func (ac *BaseController) FillUseCases()  {
-	if useCases == nil || len(useCases) == 0 {
-		var repo domain.SolarSystemRepository
-		databaseType := os.Getenv("DATABASE_TYPE")
-		if databaseType == "" || strings.EqualFold(databaseType, "inMemory") {
-			repo = repos.NewInMemorySolarSystemRepository()
-		} else if strings.EqualFold(databaseType, "MySQL") {
-			fmt.Println("Entra!!")
-			//repo = repos.NewMySqlSolarSystemRepository()
-		} else {
-			//SIN REPO
-		}
-
-		useCases[Create] = create.NewUseCase(repo)
-		useCases[QueryWeather] = query.NewUseCase(repo)
-	}
-}
-
+//GetUseCase Método para obtener el caso de uso correspondiente de cada controlador.
 func (ac *BaseController) GetUseCase() base.UseCaseBase {
-	ac.FillUseCases()
+	fillUseCases()
 	return useCases[ac.UseCaseName]
 }
 
+//SendError Método para enviar respuesta de error desde el servidor hacia el cliente.
 func (ac *BaseController) SendError(response http.ResponseWriter, message string) {
 	exists := false
 
@@ -79,5 +62,27 @@ func (ac *BaseController) SendError(response http.ResponseWriter, message string
 	err := json.NewEncoder(response).Encode(r)
 	if err != nil {
 		panic(err)
+	}
+}
+
+//fillUseCases Método encargado de la inicialización del mapa useCases, creando las instancias de los base.UseCaseBase
+//con su respectivo repositorio, dependiendo del tipo de base de datos.
+func fillUseCases()  {
+	if useCases == nil || len(useCases) == 0 {
+		var repo domain.Repository
+		databaseType := os.Getenv("DATABASE_TYPE")
+
+		//Se valida el tipo de base de datos para asignar la instancia del repositorio respectivo.
+		if databaseType == "" || strings.EqualFold(databaseType, "inMemory") {
+			repo = repos.NewInMemoryRepository()
+		} else if strings.EqualFold(databaseType, "MySQL") {
+			//repo = repos.NewMySqlSolarSystemRepository()
+		} else {
+			//SIN REPO
+		}
+
+		//Se agregan los casos de uso necesarios para los controladores.
+		useCases[Create] = create.NewUseCase(repo)
+		useCases[QueryWeather] = query.NewUseCase(repo)
 	}
 }

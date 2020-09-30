@@ -1,3 +1,4 @@
+//Package functions Funciones de entrada de los endpoints en test-server/app.go
 package functions
 
 import (
@@ -5,10 +6,6 @@ import (
 	"net/http"
 	"strconv"
 )
-
-func setHeaders(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json")
-}
 
 //GeneratePredictions Genera las predicciones
 func GeneratePredictions(w http.ResponseWriter, r *http.Request) {

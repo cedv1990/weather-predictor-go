@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	functions "github.com/cedv1990/weather-predictor-go/functions/src/http"
+	"github.com/cedv1990/weather-predictor-go/functions/src/http"
 )
 
 func handleFunc(method, url string, function func(http.ResponseWriter, *http.Request)) {

@@ -2,12 +2,13 @@ package queryweather
 
 import base "github.com/cedv1990/weather-predictor-go/functions/src/usecases"
 
-//Command Algo
+//Command Clase para implementar la interfaz CommandBase.
 type Command struct {
 	base.CommandBase
 	day int
 }
 
+//NewCommand Constructor de Command
 func NewCommand(day int) *Command {
 	c := new(Command)
 	c.day = day

@@ -1,13 +1,12 @@
 package model
 
-import (
-	vo "github.com/cedv1990/weather-predictor-go/functions/src/model/valueobjects"
-)
+import vo "github.com/cedv1990/weather-predictor-go/functions/src/model/valueobjects"
 
-//SolarSystem Entidad encargada del encapsulamiento de las propiedades de cada estrella.
+//SolarSystem Entidad encargada del encapsulamiento de los datos correspondientes al sistema solar
+//que contiene la lista de todos los días de la predicción.
 type SolarSystem struct {
-	Sun             *Star		`json:"-"`
-	Days            []*Weather	`json:"-"`
+	Sun             Sun			`json:"-"`
+	Days            []*Weather	`json:"-"` //Lista de todos los días que se predijeron.
 	DaysWithMaxRain []int		`json:"daysWithMaxRain"`
 	MaxPerimeter    float64		`json:"maxPerimeter"`
 	DryDays         int			`json:"dryDays"`
@@ -19,54 +18,56 @@ type SolarSystem struct {
 //NewSolarSystem Constructor de la clase SolarSystem
 func NewSolarSystem(days int) *SolarSystem {
 	solar := new(SolarSystem)
+
+	//Instancias
 	solar.Days = []*Weather{}
-	solar.Sun = NewStar("Sun", 0, 0, 0, false)
+	solar.Sun = *NewSun()
+
+	//Ejecuciones
 	solar.createPrediction(days)
 	solar.calculateRelevanDataFromDays()
+
 	return solar
 }
 
-//Agrega las predicciones a la lista de días que las contiene.
+//createPrediction Agrega las predicciones a la lista de días que las contiene.
 func (s *SolarSystem) createPrediction(days int) {
 	for i := 0; i < days; i++ {
 		s.Days = append(s.Days, NewWeather(s.Sun, i))
 	}
 }
 
-//Método para extraer los datos relevantes de los días calculados.
+/*
+calculateRelevanDataFromDays Método para extraer los datos relevantes de los días calculados.
+Se calcula:
+Días de lluvia,
+Días de sequía,
+Días óptimos,
+Perímetro máximo,
+Picos de lluvia (Días en los cuales los planetas forman un triángulo con ese perímetro máximo) y
+Días normales.
+*/
 func (s *SolarSystem) calculateRelevanDataFromDays() {
-	/**
-	 * Se filtran los días por su condición climática.
-	 */
-	rainyDays := s.filterByWeatherCondition(vo.Rain)
-	dryDays := s.filterByWeatherCondition(vo.Dry)
-	optimalDays := s.filterByWeatherCondition(vo.Optimal)
+	//Se filtran los días por su condición climática.
+	rainyDays 	:= s.filterByWeatherCondition(vo.Rain)
+	dryDays 	:= s.filterByWeatherCondition(vo.Dry)
+	optimalDays	:= s.filterByWeatherCondition(vo.Optimal)
 
-	/**
-	 * Se obtiene el perímetro máximo de todos los días de lluvia.
-	 */
+	//Se obtiene el perímetro máximo de todos los días de lluvia.
 	s.MaxPerimeter = findMaxPerimeter(rainyDays)
 
-	/**
-	 * Se filtran los días de lluvia que tengan ese valor de perímetro máximo.
-	 * Luego, se extrae solo el número de día.
-	 */
+	//Se filtran los días de lluvia que tengan ese valor de perímetro máximo.
+	//Luego, se extrae solo el número de día.
 	s.DaysWithMaxRain = getDaysWithMaxPerimeter(rainyDays, s.MaxPerimeter)
 
-	/**
-	 * Se asignan los totales.
-	 */
-
-	s.RainyDays = len(rainyDays)
-
-	s.DryDays = len(dryDays)
-
-	s.OptimalDays = len(optimalDays)
-
-	s.NormalDays = len(s.Days) - (len(rainyDays) + len(dryDays) + len(optimalDays))
+	//Se asignan los totales.
+	s.RainyDays		= len(rainyDays)
+	s.DryDays		= len(dryDays)
+	s.OptimalDays	= len(optimalDays)
+	s.NormalDays	= len(s.Days) - (len(rainyDays) + len(dryDays) + len(optimalDays))
 }
 
-//Método para filtrar los días por su condición climática.
+//filterByWeatherCondition Método para filtrar los días por su condición climática valueobjects.WeatherCondition.
 func (s *SolarSystem) filterByWeatherCondition(condition vo.WeatherCondition) (ret []*Weather) {
 	for _, o := range s.Days {
 		if o.WeatherCondition == condition {
@@ -76,7 +77,7 @@ func (s *SolarSystem) filterByWeatherCondition(condition vo.WeatherCondition) (r
 	return
 }
 
-//Método para encontrar el perímetro máximo de una lista de Weather
+//findMaxPerimeter Método para encontrar el perímetro máximo de una lista de Weather.
 func findMaxPerimeter(a []*Weather) (max float64) {
 	max = a[0].Perimeter
 	for _, o := range a {
@@ -87,7 +88,7 @@ func findMaxPerimeter(a []*Weather) (max float64) {
 	return
 }
 
-//Método para obtener la lista de días que tienen el perímetro máximo
+//getDaysWithMaxPerimeter Método para obtener la lista de días que tienen el perímetro máximo
 func getDaysWithMaxPerimeter(a []*Weather, p float64) (ret []int) {
 	for _, o := range a {
 		if o.Perimeter == p {
