@@ -8,6 +8,13 @@ import (
 //Create Método encargado de la creación de la instancia de SolarSystem. Valida que no se encuentren errores.
 //Si los encuentra, lanza la excepción con todos los errores para ser controlada en createsolarsystem.UseCase->Execute.
 func Create(days int) (*model.SolarSystem, *exceptions.ValidationException) {
+	if days <= 0 {
+		ex := exceptions.NewValidationException(&[]exceptions.Error{exceptions.ValidationError{
+			Message: exceptions.OutOfRange,
+		}})
+		return nil, ex
+	}
+
 	//Se instancia el validador, el cual dice si hay o no errores en la inicialización del modelo.
 	solarSystemValidator := NewValidator()
 

@@ -3,6 +3,7 @@ package shareddomain
 type (
 	Error interface {
 		Validate() bool
+		GetMessage() string
 	}
 
 	ValidationError struct {
@@ -27,9 +28,14 @@ type (
 	}
 )
 
+const (
+	ValidationExceptionName = "ValidationError"
+	NotExistsErrorName = "NotExistsError"
+)
+
 func NewValidationException(errors *[]Error) *ValidationException {
 	ins := new(ValidationException)
-	ins.Name = "ValidationError"
+	ins.Name = ValidationExceptionName
 	ins.errors = errors
 	return ins
 }
@@ -56,4 +62,12 @@ func NewNotExistsError(no bool) *NotExistsError {
 
 func (er *NotExistsError) Validate() bool {
 	return er.No
+}
+
+func (er *NotExistsError) GetMessage() string {
+	return NotExistsErrorName
+}
+
+func (er ValidationError) GetMessage() string {
+	return er.Message
 }

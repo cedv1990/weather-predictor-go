@@ -1,15 +1,17 @@
 package model
 
+import "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
+
 //PolarCoordinate Clase que contiene las coordenadas polares de un punto.
 type PolarCoordinate struct {
-	Coordinate
+	shareddomain.Coordinate
 	Radius int
 	Grades int
 }
 
 //CartesianCoordinate Clase que contiene las coordenadas cartesianas de un punto.
 type CartesianCoordinate struct {
-	Coordinate
+	shareddomain.Coordinate
 	X float64
 	Y float64
 }

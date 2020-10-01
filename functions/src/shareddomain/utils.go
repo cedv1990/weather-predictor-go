@@ -2,7 +2,6 @@ package shareddomain
 
 import (
 	"errors"
-	"github.com/cedv1990/weather-predictor-go/functions/src/model"
 	"math"
 	"time"
 )
@@ -25,7 +24,7 @@ func GetDaysFromNumberOfYears(years int) (int, error) {
 }
 
 //GetCartesianCoordinateFromPolarCoordinate Método que calcula las coordenadas cartesianas a partir de coordenadas polares.
-func GetCartesianCoordinateFromPolarCoordinate(polar model.Coordinate) (x, y float64) {
+func GetCartesianCoordinateFromPolarCoordinate(polar Coordinate) (x, y float64) {
 	radiansAngle := float64(polar.GetGrades()) * math.Pi / 180
 
 	x = float64(polar.GetRadius()) * math.Cos(radiansAngle)
@@ -36,8 +35,8 @@ func GetCartesianCoordinateFromPolarCoordinate(polar model.Coordinate) (x, y flo
 }
 
 //GenerateFunctionToCalculateSlope Método que devuelve la función que calcula la pendiente formada entre dos puntos, a partir de sus coordenadas cartesianas.
-func GenerateFunctionToCalculateSlope(from model.Coordinate) func(to model.Coordinate) float64 {
-	return func(to model.Coordinate) float64 {
+func GenerateFunctionToCalculateSlope(from Coordinate) func(to Coordinate) float64 {
+	return func(to Coordinate) float64 {
 		x1, y1 := from.GetX(), from.GetY()
 		x2, y2 := to.GetX(), to.GetY()
 
@@ -59,7 +58,7 @@ func Round(decimal float64, to int) float64 {
 }
 
 //GetDistanceBetweenPoints Método que calcula la distancia que hay entre 2 puntos cartesianos.
-func GetDistanceBetweenPoints(from, to model.Coordinate) float64 {
+func GetDistanceBetweenPoints(from, to Coordinate) float64 {
 	co := math.Pow(to.GetX()-from.GetX(), 2)
 	ca := math.Pow(to.GetY()-from.GetY(), 2)
 
@@ -67,7 +66,7 @@ func GetDistanceBetweenPoints(from, to model.Coordinate) float64 {
 }
 
 //EvaluateIfPointIsInsideTheTriangle Método que evalúa si un punto P se encuentra dentro del perímetro de un triángulo formado por los puntos A + B + C.
-func EvaluateIfPointIsInsideTheTriangle(a, b, c, p model.Coordinate) bool {
+func EvaluateIfPointIsInsideTheTriangle(a, b, c, p Coordinate) bool {
 	/**
 	 * Fórmula tomada de {@link "https://huse360.home.blog/2019/12/14/como-saber-si-un-punto-esta-dentro-de-un-triangulo/"}
 	 */

@@ -2,14 +2,15 @@
 package functions
 
 import (
-	"github.com/cedv1990/weather-predictor-go/functions/src/http/controllers"
+	"github.com/cedv1990/weather-predictor-go/functions/src/http/controllers/solarsystem"
+	"github.com/cedv1990/weather-predictor-go/functions/src/http/controllers/weather"
 	"net/http"
 	"strconv"
 )
 
 //GeneratePredictions Genera las predicciones
 func GeneratePredictions(w http.ResponseWriter, r *http.Request) {
-	controllers.GeneratePredictions(w)
+	solarsystem.GeneratePredictions(w)
 }
 
 //GetSpecificDayWeather Obtiene la predicción
@@ -21,7 +22,7 @@ func GetSpecificDayWeather(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		controllers.GetSpecificDayWeather(n, w)
+		weather.GetSpecificDayWeather(n, w)
 	} else {
 		w.WriteHeader(http.StatusUnauthorized)
 	}

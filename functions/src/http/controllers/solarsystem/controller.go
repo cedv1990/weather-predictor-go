@@ -1,7 +1,8 @@
-package controllers
+package solarsystem
 
 import (
 	"encoding/json"
+	"github.com/cedv1990/weather-predictor-go/functions/src/http/controllers"
 	"github.com/cedv1990/weather-predictor-go/functions/src/model"
 	utils "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
 	"github.com/cedv1990/weather-predictor-go/functions/src/usecases"
@@ -11,20 +12,20 @@ import (
 
 //SolarSystemController Clase encargada de la generación de las predicciones.
 type SolarSystemController struct {
-	BaseController
+	controllers.BaseController
 	base.ResponderBase
 
 	data *model.SolarSystem //Propiedad privada que contiene la instancia generada en la creación de la predicción. Se asigna en el método SuccessfullyCreated.
 }
 
-func NewCreateController() *SolarSystemController {
+func NewSolarSystemController() *SolarSystemController {
 	inst := new(SolarSystemController)
-	inst.UseCaseName = Create
+	inst.UseCaseName = controllers.Create
 	return inst
 }
 
-//generate Método que se encarga de obtener el caso de uso, el comando correspondiente y la ejecución del caso de uso.
-func (inst *SolarSystemController) generate(days int) {
+//Generate Método que se encarga de obtener el caso de uso, el comando correspondiente y la ejecución del caso de uso.
+func (inst *SolarSystemController) Generate(days int) {
 	//Se obtiene el caso de uso y se instancia el comando con la cantidad de días.
 	useCase := inst.GetUseCase()
 	command := cases.NewCommand(days)
@@ -38,12 +39,14 @@ func (inst *SolarSystemController) generate(days int) {
 //El método es llamado por el caso de uso createsolarsystem.UseCase.
 func (inst *SolarSystemController) SuccessfullyCreated(system *model.SolarSystem) {
 	inst.data = system
+	inst.SetErrors(nil)
 }
 
 //NotCreated Método implementado de la interfaz base.ResponderBase.
 //El método es llamado por el caso de uso createsolarsystem.UseCase cuando ocurren errores.
 func (inst *SolarSystemController) NotCreated(errors *[]utils.Error) {
-	inst.presentedErrors = errors
+	inst.SetErrors(errors)
+	inst.data = nil
 }
 
 //GeneratePredictions Método que recibe la solicitud web del endpoint /generar-prediccion.
@@ -60,12 +63,12 @@ func GeneratePredictions(response http.ResponseWriter) {
 		return
 	}
 
-	inst := NewCreateController()
+	inst := NewSolarSystemController()
 
 	//Se ejecuta la generación de las predicciones.
-	inst.generate(days)
+	inst.Generate(days)
 
-	if inst.presentedErrors != nil {
+	if inst.GetErrors() != nil {
 		inst.SendError(response, "The solar system was already created. Congrats!")
 		return
 	}

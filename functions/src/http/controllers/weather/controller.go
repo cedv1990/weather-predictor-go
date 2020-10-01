@@ -1,7 +1,8 @@
-package controllers
+package weather
 
 import (
 	"encoding/json"
+	"github.com/cedv1990/weather-predictor-go/functions/src/http/controllers"
 	"github.com/cedv1990/weather-predictor-go/functions/src/model"
 	vo "github.com/cedv1990/weather-predictor-go/functions/src/model/valueobjects"
 	errors "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
@@ -12,7 +13,7 @@ import (
 
 //WeatherController Clase encargada de manejar las consultas de estado del clima.
 type WeatherController struct {
-	BaseController
+	controllers.BaseController
 	base.ResponderBase
 
 	data *model.Weather //Propiedad privada que contiene el resultado de la consulta del día.
@@ -20,7 +21,7 @@ type WeatherController struct {
 
 func NewWeatherController() *WeatherController {
 	inst := new(WeatherController)
-	inst.UseCaseName = QueryWeather
+	inst.UseCaseName = controllers.QueryWeather
 	return inst
 }
 
@@ -39,12 +40,14 @@ func (inst *WeatherController) getDayWeatherFromSolarSystem(day int) {
 //El método es llamado por el caso de uso queryweather.UseCase.
 func (inst *WeatherController) Found(weather *model.Weather) {
 	inst.data = weather
+	inst.SetErrors(nil)
 }
 
 //NotFound Método implementado de la interfaz base.ResponderBase.
 //El método es llamado por el caso de uso queryweather.UseCase cuando ocurren errores.
 func (inst *WeatherController) NotFound(errors *[]errors.Error) {
-	inst.presentedErrors = errors
+	inst.SetErrors(errors)
+	inst.data = nil
 }
 
 //GetSpecificDayWeather Método que recibe la solicitud web del endpoint /clima?dia=n
@@ -54,7 +57,7 @@ func GetSpecificDayWeather(day int, response http.ResponseWriter) {
 	//Se ejecuta el método para obtener la condición climática del día.
 	inst.getDayWeatherFromSolarSystem(day)
 
-	if inst.presentedErrors != nil {
+	if inst.GetErrors() != nil {
 		inst.SendError(response, "The day does not exist!")
 		return
 	}

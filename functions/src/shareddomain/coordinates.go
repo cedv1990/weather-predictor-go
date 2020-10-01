@@ -1,4 +1,4 @@
-package model
+package shareddomain
 
 //Coordinate interfaz para que las coordenadas la implementen
 type Coordinate interface {

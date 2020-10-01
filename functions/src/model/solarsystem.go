@@ -22,6 +22,12 @@ func NewSolarSystem(days int) *SolarSystem {
 	//Instancias
 	solar.Days = []*Weather{}
 	solar.Sun = *NewSun()
+	solar.DaysWithMaxRain = []int{}
+	solar.MaxPerimeter = -1
+	solar.DryDays = 0
+	solar.RainyDays = 0
+	solar.OptimalDays = 0
+	solar.NormalDays = 0
 
 	//Ejecuciones
 	solar.createPrediction(days)
@@ -53,18 +59,29 @@ func (s *SolarSystem) calculateRelevanDataFromDays() {
 	dryDays 	:= s.filterByWeatherCondition(vo.Dry)
 	optimalDays	:= s.filterByWeatherCondition(vo.Optimal)
 
-	//Se obtiene el perímetro máximo de todos los días de lluvia.
-	s.MaxPerimeter = findMaxPerimeter(rainyDays)
+	if rainyDays != nil {
+		//Se obtiene el perímetro máximo de todos los días de lluvia.
+		s.MaxPerimeter = findMaxPerimeter(rainyDays)
 
-	//Se filtran los días de lluvia que tengan ese valor de perímetro máximo.
-	//Luego, se extrae solo el número de día.
-	s.DaysWithMaxRain = getDaysWithMaxPerimeter(rainyDays, s.MaxPerimeter)
+		//Se filtran los días de lluvia que tengan ese valor de perímetro máximo.
+		//Luego, se extrae solo el número de día.
+		s.DaysWithMaxRain = getDaysWithMaxPerimeter(rainyDays, s.MaxPerimeter)
 
-	//Se asignan los totales.
-	s.RainyDays		= len(rainyDays)
-	s.DryDays		= len(dryDays)
-	s.OptimalDays	= len(optimalDays)
-	s.NormalDays	= len(s.Days) - (len(rainyDays) + len(dryDays) + len(optimalDays))
+		//Se asignan el total.
+		s.RainyDays	= len(rainyDays)
+	}
+
+	if dryDays != nil {
+		//Se asignan el total.
+		s.DryDays = len(dryDays)
+	}
+
+	if optimalDays != nil {
+		//Se asignan el total.
+		s.OptimalDays = len(optimalDays)
+	}
+
+	s.NormalDays = len(s.Days) - (s.RainyDays + s.DryDays + s.OptimalDays)
 }
 
 //filterByWeatherCondition Método para filtrar los días por su condición climática valueobjects.WeatherCondition.

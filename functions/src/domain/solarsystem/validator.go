@@ -1,6 +1,7 @@
 package solarsystem
 
 import (
+	"github.com/cedv1990/weather-predictor-go/functions/src/domain"
 	"github.com/cedv1990/weather-predictor-go/functions/src/model"
 	errors "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
 )
@@ -8,7 +9,7 @@ import (
 //Validator Clase creada para la validación de errores en el proceso de creación de la instancia de model.SolarSystem.
 //Implementa errors.DomainModelValidator.
 type Validator struct {
-	errors.DomainModelValidator
+	domain.ModelValidator
 
 	errors *[]errors.Error
 }

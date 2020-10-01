@@ -18,7 +18,8 @@ var useCases = make(map[UseCaseName]base.UseCaseBase) //Almacena los diferentes 
 type (
 	//BaseController Clase que se usará para heredarse en los diferentes controladores.
 	BaseController struct {
-		UseCaseName UseCaseName //Nombre del caso de uso del controlador.
+		resetrepo       bool
+		UseCaseName     UseCaseName     //Nombre del caso de uso del controlador.
 		presentedErrors *[]errors.Error //Lista de errores ocurridos en las ejecuciones.
 	}
 
@@ -33,8 +34,20 @@ const (
 
 //GetUseCase Método para obtener el caso de uso correspondiente de cada controlador.
 func (ac *BaseController) GetUseCase() base.UseCaseBase {
-	fillUseCases()
+	ac.fillUseCases()
 	return useCases[ac.UseCaseName]
+}
+
+func (ac *BaseController) ResetRepo() {
+	ac.resetrepo = true
+}
+
+func (ac *BaseController) GetErrors() *[]errors.Error {
+	return ac.presentedErrors
+}
+
+func (ac *BaseController) SetErrors(errors *[]errors.Error) {
+	ac.presentedErrors = errors
 }
 
 //SendError Método para enviar respuesta de error desde el servidor hacia el cliente.
@@ -67,8 +80,8 @@ func (ac *BaseController) SendError(response http.ResponseWriter, message string
 
 //fillUseCases Método encargado de la inicialización del mapa useCases, creando las instancias de los base.UseCaseBase
 //con su respectivo repositorio, dependiendo del tipo de base de datos.
-func fillUseCases()  {
-	if useCases == nil || len(useCases) == 0 {
+func (ac *BaseController) fillUseCases()  {
+	if ac.resetrepo || useCases == nil || len(useCases) == 0 {
 		var repo domain.Repository
 		databaseType := os.Getenv("DATABASE_TYPE")
 

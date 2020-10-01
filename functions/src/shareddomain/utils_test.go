@@ -1,12 +1,10 @@
 package shareddomain
 
-import (
-	"testing"
-)
+import "testing"
 
 func Test_GetDaysFromNumberOfYears_ErrorWithNegative(t *testing.T) {
 	days, err := GetDaysFromNumberOfYears(-1)
-	if err == nil {
+	if err == nil || err.Error() != OutOfRange {
 		t.Errorf("It should throw an error. Expected %s, got %v", OutOfRange, err)
 	}
 	if days != 0 {
