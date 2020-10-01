@@ -20,6 +20,8 @@ func TestMain(m *testing.M) {
 func Test_generate_WithOneDay(t *testing.T) {
 	ass := assert.New(t)
 
+	const days = 1
+
 	solarExpectedOneDay := &model.SolarSystem{
 		DaysWithMaxRain: []int{},
 		MaxPerimeter: -1,
@@ -27,11 +29,11 @@ func Test_generate_WithOneDay(t *testing.T) {
 		RainyDays: 0,
 		OptimalDays: 0,
 		NormalDays: 0,
-		Days: make([]*model.Weather, 1),
+		Days: make([]*model.Weather, days),
 	}
 
 	controller.ResetRepo()
-	controller.Generate(1)
+	controller.Generate(days)
 
 	errors := controller.GetErrors()
 	solar := controller.data
@@ -44,8 +46,10 @@ func Test_generate_WithOneDay(t *testing.T) {
 func Test_generate_WithFiftyDays(t *testing.T) {
 	ass := assert.New(t)
 
+	const days = 50
+
 	solarExpectedFiftyDays := &model.SolarSystem{
-		Days: make([]*model.Weather, 50),
+		Days: make([]*model.Weather, days),
 		DaysWithMaxRain: make([]int, 1),
 		MaxPerimeter: 6135.928957012673,
 		DryDays: 1,
@@ -55,7 +59,7 @@ func Test_generate_WithFiftyDays(t *testing.T) {
 	}
 
 	controller.ResetRepo()
-	controller.Generate(50)
+	controller.Generate(days)
 
 	errors := controller.GetErrors()
 	solar := controller.data
