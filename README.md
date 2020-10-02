@@ -181,6 +181,10 @@ Esta base de datos se ve de la siguiente forma:
     <img alt="Table weather_days" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-go/master/assets/table-weather_days.jpg">
 </p>
 
+<p align="center">
+    <img alt="Data table weather_days" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-go/master/assets/table-weather_days-data.jpg">
+</p>
+
 **Consideración**: Esta tabla no contiene más información debido al planteamiento del problema, el cual solo exige la consulta del estado del clima en un día específico, mas no de los demás datos.
 
 **Challenge**: Invito a todxs lxs que quieran agregar nuevos [repositorios](https://github.com/cedv1990/weather-predictor-go/tree/master/functions/src/infraestructure/solarsystem) a enriquecer este proyecto para usarlo de ejemplo de programación en ***Go*** y arquitecturas descritas en *[Hablando de código](#hablando-de-código-)*.
