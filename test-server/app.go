@@ -25,8 +25,6 @@ func instance() {
 }
 
 func main() {
-	os.Setenv("DATABASE_TYPE", "mysql")
-
 	databaseType := os.Getenv("DATABASE_TYPE")
 	if databaseType == "" {
 		databaseType = "inMemory"
