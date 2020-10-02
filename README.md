@@ -50,7 +50,7 @@ Para poder utilizar el sistema como un **servicio a las otras civilizaciones**, 
 
 ## ¿Cómo pruebo la solución de este repositorio? 🤔︎
 
-El proyecto consta de 2 carpetas de aplicación ([functions](https://github.com/cedv1990/weather-predictor-go/tree/master/functions) y [test-server](https://github.com/cedv1990/weather-predictor-go/tree/master/test-server)).
+El proyecto consta de 2 carpetas de aplicación ([functions](https://github.com/cedv1990/weather-predictor-go/tree/master/functions) y [test-server](https://github.com/cedv1990/weather-predictor-go/tree/master/test-server)) y una carpeta para los recursos de esta documentación ([assets](https://github.com/cedv1990/weather-predictor-go/tree/master/assets)).
 
 Una vez se clona o descarga el proyecto, se deben seguir los comandos a continuación.
 
@@ -164,3 +164,23 @@ Una vez se clona o descarga el proyecto, se deben seguir los comandos a continua
 
 ### Y la base de datos... ¿qué? ⛅
 
+Si llevamos a cabo la ejecución del script *DATABASE_TYPE=MySQL go run app.go*, la aplicación al recibir la primera solicitud, sea el endpoint que sea, realizará el montaje de la base de datos **[MySQL](https://www.mysql.com/)**, creando la tabla necesaria para el almacenamiento y consulta de las predicciones.
+
+La gestión del repositorio se realiza en [mysql.go](https://github.com/cedv1990/weather-predictor-go/blob/master/test-server/app.go).
+
+Esta base de datos se ve de la siguiente forma:
+
+- Tabla ***weather_days***:
+
+    Los campos son:
+    
+    - **day**: Número de día. Empieza por *0*.
+    - **condition**: Corresponde a la condición climática de ese día.
+
+<p align="center">
+    <img alt="Table weather_days" src="https://raw.githubusercontent.com/cedv1990/weather-predictor-go/master/assets/table-weather_days.jpg">
+</p>
+
+**Consideración**: Esta tabla no contiene más información debido al planteamiento del problema, el cual solo exige la consulta del estado del clima en un día específico, mas no de los demás datos.
+
+**Challenge**: Invito a todxs lxs que quieran agregar nuevos [repositorios](https://github.com/cedv1990/weather-predictor-go/tree/master/functions/src/infraestructure/solarsystem) a enriquecer este proyecto para usarlo de ejemplo de programación en ***Go*** y arquitecturas descritas en *[Hablando de código](#hablando-de-código-)*.
