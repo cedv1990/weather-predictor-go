@@ -7,9 +7,9 @@ import (
 
 //Weather Clase encargada del encapsulamiento de los datos correspondientes a un día específico en la predicción.
 type Weather struct {
-	Betasoide			*Betasoide //Amilcar: Preguntar por qué no puedo dejarlo del tipo BaseStar
-	Vulcano				*Vulcano
-	Ferengi				*Ferengi
+	Betasoide			Star
+	Vulcano				Star
+	Ferengi				Star
 	Perimeter			float64
 	WeatherCondition	vo.WeatherCondition
 	Day					int

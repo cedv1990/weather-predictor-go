@@ -1,7 +1,6 @@
 package solarsystem
 
 import (
-	domain "github.com/cedv1990/weather-predictor-go/functions/src/domain/solarsystem"
 	"github.com/cedv1990/weather-predictor-go/functions/src/model"
 	errors "github.com/cedv1990/weather-predictor-go/functions/src/shareddomain"
 )
@@ -10,7 +9,7 @@ var repo *model.SolarSystem //Propiedad que tendrá los datos en memoria.
 
 //InMemoryRepository Clase encargada de la persistencia de datos en memoria.
 type InMemoryRepository struct {
-	domain.Repository
+	RepositoryBase
 }
 
 func NewInMemoryRepository() *InMemoryRepository {
@@ -40,7 +39,7 @@ func (iss *InMemoryRepository) GetDay(day int) (*model.Weather, *errors.Validati
 
 	//Se valida si hay datos.
 	if !iss.Exists() {
-		return sendError()
+		return iss.SendError()
 	}
 
 	//Se valida si el día existe
@@ -50,17 +49,11 @@ func (iss *InMemoryRepository) GetDay(day int) (*model.Weather, *errors.Validati
 
 		//Se valida si el día tiene datos.
 		if weather == nil {
-			return sendError()
+			return iss.SendError()
 		}
 
 		return weather, nil
 	}
 
-	return sendError()
-}
-
-//sendError Método para crear un error y devolverlo.
-func sendError() (*model.Weather, *errors.ValidationException) {
-	ex := errors.NewValidationException(&[]errors.Error{errors.NewNotExistsError(true)})
-	return nil, ex
+	return iss.SendError()
 }

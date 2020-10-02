@@ -4,6 +4,8 @@ type (
 	//Star Interface para la herencia y envío de info a otros métodos.
 	Star interface {
 		SetPositionByDayNumber(dayNumber int)
+		GetClockWise() bool
+		GetVelocity() int
 		GetPolarCoordinate() PolarCoordinate
 	}
 
@@ -54,6 +56,16 @@ func (star *BaseStar) SetPositionByDayNumber(dayNumber int) {
 //GetPolarCoordinate Obtiene la coordenada polar
 func (star *BaseStar) GetPolarCoordinate() PolarCoordinate {
 	return *star.PolarCoordinate
+}
+
+//GetClockWise Obtiene la dirección del planeta
+func (star *BaseStar) GetClockWise() bool {
+	return star.Clockwise
+}
+
+//GetVelocity Obtiene la velocidad del planeta
+func (star *BaseStar) GetVelocity() int {
+	return star.Velocity
 }
 
 //NewBetasoide constructor de Betasoide.

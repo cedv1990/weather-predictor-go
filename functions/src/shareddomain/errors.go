@@ -16,6 +16,11 @@ type (
 		Is bool
 	}
 
+	MySqlError struct {
+		Error
+		Message string
+	}
+
 	NotExistsError struct {
 		Error
 		No bool
@@ -31,6 +36,9 @@ type (
 const (
 	ValidationExceptionName = "ValidationError"
 	NotExistsErrorName = "NotExistsError"
+	WithoutConnection = "WithoutConnection"
+	TableNotCreated = "TableNotCreated"
+	NotInserted = "NotInserted"
 )
 
 func NewValidationException(errors *[]Error) *ValidationException {
@@ -52,6 +60,16 @@ func NewAlreadyExistsError(is bool) *AlreadyExistsError {
 
 func (er *AlreadyExistsError) Validate() bool {
 	return er.Is
+}
+
+func NewMySqlError(msg string) *MySqlError {
+	ins := new(MySqlError)
+	ins.Message = msg
+	return ins
+}
+
+func (er *MySqlError) GetMessage() string {
+	return er.Message
 }
 
 func NewNotExistsError(no bool) *NotExistsError {

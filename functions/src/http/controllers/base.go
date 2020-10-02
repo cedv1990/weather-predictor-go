@@ -89,7 +89,7 @@ func (ac *BaseController) fillUseCases()  {
 		if databaseType == "" || strings.EqualFold(databaseType, "inMemory") {
 			repo = repos.NewInMemoryRepository()
 		} else if strings.EqualFold(databaseType, "MySQL") {
-			//repo = repos.NewMySqlSolarSystemRepository()
+			repo = repos.NewMySqlRepository()
 		} else {
 			//SIN REPO
 		}

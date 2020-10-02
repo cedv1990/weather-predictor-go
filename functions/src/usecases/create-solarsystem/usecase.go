@@ -24,7 +24,7 @@ func NewUseCase(repo domain.Repository) *UseCase {
 func (uc *UseCase) Execute(command base.CommandBase, responder base.ResponderBase) {
 	//Se valida si existen datos, no volverlos a generar.
 	if repository.Exists() {
-		responder.NotFound(&[]errors.Error{errors.NewAlreadyExistsError(true)})
+		responder.NotCreated(&[]errors.Error{errors.NewAlreadyExistsError(true)})
 		return
 	}
 
