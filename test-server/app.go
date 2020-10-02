@@ -10,7 +10,7 @@ import (
 )
 
 func handleFunc(method, url string, function func(http.ResponseWriter, *http.Request)) {
-	http.HandleFunc(url, func(w http.ResponseWriter, r *http.Request){
+	http.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == method {
 			function(w, r)
 		} else {
@@ -20,8 +20,8 @@ func handleFunc(method, url string, function func(http.ResponseWriter, *http.Req
 }
 
 func instance() {
-	handleFunc(http.MethodGet,"/generar-prediccion", functions.GeneratePredictions)
-	handleFunc(http.MethodGet,`/clima`, functions.GetSpecificDayWeather)
+	handleFunc(http.MethodGet, "/generar-prediccion", functions.GeneratePredictions)
+	handleFunc(http.MethodGet, "/clima", functions.GetSpecificDayWeather)
 }
 
 func main() {
