@@ -91,8 +91,8 @@ Una vez se clona o descarga el proyecto, se deben seguir los comandos a continua
 
         - Método HTTP: ***GET***
         - Url: [http://localhost:1234/generar-prediccion](http://localhost:1234/generar-prediccion)
-        - Controlador: [CreateSolarSystemController](https://github.com/cedv1990/weather-predictor-go/blob/master/functions/src/http/controllers/solarsystem/createsolarsystem.controller.ts)
-        - Método: *generatePredictions*
+        - Controlador: [SolarSystemController](https://github.com/cedv1990/weather-predictor-go/blob/master/functions/src/http/controllers/solarsystem/controller.go)
+        - Método: *GeneratePredictions*
         - [Códigos de respuesta](https://developer.mozilla.org/es/docs/Web/HTTP/Status):
 
             [201 Created](https://developer.mozilla.org/es/docs/Web/HTTP/Status/201): El sistema solar y los datos del clima de 10 años han sido cargados correctamente.
@@ -129,8 +129,8 @@ Una vez se clona o descarga el proyecto, se deben seguir los comandos a continua
 
         - Método HTTP: ***GET***
         - Url: http://localhost:1234/clima?dia=n
-        - Controlador: [QueryWeatherController](https://github.com/cedv1990/weather-predictor-go/blob/master/functions/src/http/controllers/weather/querysolarsystem.controller.ts)
-        - Método: *getSpecificDayWeather*
+        - Controlador: [WeatherController](https://github.com/cedv1990/weather-predictor-go/blob/master/functions/src/http/controllers/weather/controller.go)
+        - Método: *GetSpecificDayWeather*
         - [Códigos de respuesta](https://developer.mozilla.org/es/docs/Web/HTTP/Status):
 
             [200 OK](https://developer.mozilla.org/es/docs/Web/HTTP/Status/200): El día solicitado en el [Query String](https://es.wikipedia.org/wiki/Query_string) fue encontrado exitosamente y se envía el estado del clima en el cuerpo. Ejemplo: [http://localhost:1234/clima?dia=566](http://localhost:1234/clima?dia=566)
@@ -160,13 +160,13 @@ Una vez se clona o descarga el proyecto, se deben seguir los comandos a continua
 
 - **☕ Arquitectura...** se implementó la arquitectura **Hexagonal** de la mano de **DDD**, **CQRS** sin olvidar los principios **SOLID**.
 
-- **✍️ Lenguaje/tecnología...** todo esto fue desarrollado en Go.
+- **✍️ Lenguaje/tecnología...** todo esto fue desarrollado en **[Go](https://golang.org/)**.
 
 ### Y la base de datos... ¿qué? ⛅
 
 Si llevamos a cabo la ejecución del script *DATABASE_TYPE=MySQL go run app.go*, la aplicación al recibir la primera solicitud, sea el endpoint que sea, realizará el montaje de la base de datos **[MySQL](https://www.mysql.com/)**, creando la tabla necesaria para el almacenamiento y consulta de las predicciones.
 
-La gestión del repositorio se realiza en [mysql.go](https://github.com/cedv1990/weather-predictor-go/blob/master/test-server/app.go).
+La gestión del repositorio se realiza en [mysql.go](https://github.com/cedv1990/weather-predictor-go/blob/master/functions/src/infraestructure/solarsystem/mysql.go).
 
 Esta base de datos se ve de la siguiente forma:
 
