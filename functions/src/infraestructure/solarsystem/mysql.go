@@ -9,7 +9,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var db *sql.DB
+var db *sql.DB //Propiedad que tendrá la conexión a MySQL
 
 const (
 	dataBaseName     = "weather_predictions"
@@ -18,6 +18,7 @@ const (
 	dataBasePort     = 3306
 )
 
+//MySqlRepository Clase encargada de la persistencia de datos en MySQL.
 type MySqlRepository struct {
 	RepositoryBase
 }
@@ -27,6 +28,7 @@ func NewMySqlRepository() *MySqlRepository {
 	return iss
 }
 
+//Save Método para almacenar los datos generados en MySQL.
 func (iis *MySqlRepository) Save(solarSystem *model.SolarSystem) (*model.SolarSystem, *errors.ValidationException) {
 	err := prepare()
 	defer db.Close()
@@ -36,7 +38,7 @@ func (iis *MySqlRepository) Save(solarSystem *model.SolarSystem) (*model.SolarSy
 	}
 
 	for _, w := range solarSystem.Days {
-		st, err := insert(SQLINSERTSOLARSYSTEM)
+		st, err := db.Prepare(SQLINSERTSOLARSYSTEM)
 		if err != nil {
 			ex := errors.NewValidationException(&[]errors.Error{errors.NewMySqlError(errors.NotInserted)})
 			return nil, ex
@@ -53,6 +55,7 @@ func (iis *MySqlRepository) Save(solarSystem *model.SolarSystem) (*model.SolarSy
 	return solarSystem, nil
 }
 
+//Exists Método para validar si ya existen datos en memoria.
 func (iis *MySqlRepository) Exists() (error bool) {
 	er := prepare()
 	defer db.Close()
@@ -68,6 +71,7 @@ func (iis *MySqlRepository) Exists() (error bool) {
 	return
 }
 
+//GetDay Método para obtener el estado del clima de un día específico.
 func (iis *MySqlRepository) GetDay(day int) (*model.Weather, *errors.ValidationException) {
 	if !iis.Exists() {
 		return iis.SendError()
@@ -93,6 +97,7 @@ func (iis *MySqlRepository) GetDay(day int) (*model.Weather, *errors.ValidationE
 	}, nil
 }
 
+//prepare Método para crear la tabla si no existe.
 func prepare() *errors.ValidationException {
 	conn, err := openConnectionMySql()
 	if err != nil {
@@ -101,7 +106,7 @@ func prepare() *errors.ValidationException {
 	}
 	db = conn
 
-	_, err = createTable(SQLWEATHER)
+	_, err = db.Exec(SQLWEATHER)
 	if err != nil {
 		ex := errors.NewValidationException(&[]errors.Error{errors.NewMySqlError(errors.TableNotCreated)})
 		return ex
@@ -110,30 +115,24 @@ func prepare() *errors.ValidationException {
 	return nil
 }
 
+//openConnectionMySql Método para crear la base de datos si no existe y conectarse a ella.
 func openConnectionMySql() (*sql.DB, error) {
 	conn, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(127.0.0.1:%d)/", dataBaseUser, dataBaseUserPass, dataBasePort))
 	if err != nil {
 		return nil, err
 	}
-	_, err = conn.Exec("CREATE DATABASE IF NOT EXISTS " + dataBaseName)
+	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS " + dataBaseName)
 	if err != nil {
 		return nil, err
 	}
-	_, err = conn.Exec("USE " + dataBaseName)
+	_, err = db.Exec("USE " + dataBaseName)
 	if err != nil {
 		return nil, err
 	}
 	return conn, nil
 }
 
-func createTable(sql string) (sql.Result, error) {
-	return db.Exec(sql)
-}
-
-func insert(sql string) (*sql.Stmt, error) {
-	return db.Prepare(sql)
-}
-
+//queryRow Método para consultar el dato de una fila.
 func queryRow(query string, pointer interface{}) (*sql.Row, error) {
 	a := db.QueryRow(query)
 	err := a.Scan(pointer)

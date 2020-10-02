@@ -18,7 +18,7 @@ func NewInMemoryRepository() *InMemoryRepository {
 	return iss
 }
 
-//Create Método para almacenar los datos generados en memoria.
+//Save Método para almacenar los datos generados en memoria.
 func (iss *InMemoryRepository) Save(solarSystem *model.SolarSystem) (*model.SolarSystem, *errors.ValidationException) {
 	//Se valida si los datos ya fueron generados.
 	if iss.Exists() {
